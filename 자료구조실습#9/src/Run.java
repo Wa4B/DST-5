@@ -13,13 +13,10 @@ public class Run {
 		avlt.print_preorder();
 		avlt.print_preorder_diff();
 		avlt.delete(1);
-		avlt.print_preorder_diff();
 		avlt.delete(10);
 		avlt.print_preorder_diff();
 		avlt.delete(5);
-		avlt.print_preorder_diff();
-		avlt.delete(30);
-		avlt.print_preorder_diff();
+		avlt.insert(30);
 		avlt.delete(18);
 		avlt.print_preorder_diff();
 		

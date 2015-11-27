@@ -10,9 +10,19 @@ public class AVLT{
 				this.key = key;
 			}
 		}
-	
-	
 	private int balance(Node nd, Node ndP,int LR){//RL :nd가 ndP의 r인지 l 인지 구분 0:좌 1:우 -1루트
+		/*
+		 * nd의 양쪽 child를 내려가면서 nd의 tree에 있는 노드의 높이를 재귀적으로 설정한다.
+		 * 만약 노드 child가 없다면 해당 노드의 높이는 1로 한다.
+		 * 해당 노드들의 높이는 lchild의 높이와 rchild의 높이중 값이 큰 것에서 +1로 하여 설정한다.
+		 * 노드의 높이를 설정한후 lchild의 높이와 rchild의 높이를 비교하여, 그 차이가 2이상이면 밸런스를 맞춘다.
+		 * LL불균형일경우 nd.lchild가 nd의 위치로 오게설정.
+		 * LR불균형일경우 nd.lchild.rchild가 nd의 위치로 오게 설ㅈ어.
+		 * RR불균현일경우 nd.rchild가 nd의 위치로 오게설정.
+		 * RL불균형일경우 nd.rchidl.lchild가 nd의 위치로 오게설정한다.
+		 * 이동을 마친후, nd의 위치에 오게된 노드를 nd로 설정한다.
+		 * 그후 nd의 높이를 balance함수를 써서 설정한다.
+		 */
 		int height = 0;
 		int heightR = 0;
 		int heightL = 0;
@@ -31,22 +41,13 @@ public class AVLT{
 		}else{
 			height = heightR+1;
 		}
-		
-		
-		
-		
-		
-		nd.height = height;
-		
-		
+		nd.height = height;	
 		if(heightL-heightR > 1){
-			System.out.println("LLL"+heightL+","+heightR+","+nd.key);
+			//System.out.println("LLL"+heightL+","+heightR+","+nd.key);
 			Node ndT;
 			if(nd.lchild.lchild != null&&nd.lchild.height == nd.lchild.lchild.height +1){
-				System.out.println("LL");
+				//System.out.println("LL");
 				ndT = nd.lchild;
-				nd.height -=2;
-				
 				if(ndT.rchild != null){
 					nd.lchild = ndT.rchild;
 				}else{
@@ -56,10 +57,8 @@ public class AVLT{
 				
 				
 			}else {
-				System.out.println("LR");
+			//	System.out.println("LR");
 				ndT = nd.lchild.rchild;
-				ndT.height +=1;
-				nd.height -= 1;
 				if(ndT.lchild != null){
 					nd.lchild.rchild = ndT.lchild;
 				}else{
@@ -72,12 +71,8 @@ public class AVLT{
 				}else{
 					nd.lchild =null;
 				}
-				ndT.rchild = nd;
-				
-				
-				
-			}
-			balance(nd,ndP,LR);
+				ndT.rchild = nd;		
+			}		
 			nd = ndT;
 			if(LR == -1){
 				root = ndT;
@@ -86,31 +81,26 @@ public class AVLT{
 			}else{
 				ndP.rchild = ndT;
 			}
+			balance(nd,ndP,LR);
 		}else if(heightR - heightL > 1){
 			
-			System.out.println("RRR"+heightL+","+heightR+","+nd.key);
+			//System.out.println("RRR"+heightL+","+heightR+","+nd.key);
 			Node ndT = nd;
 			if(nd.rchild.rchild != null&&nd.rchild.height == nd.rchild.rchild.height +1){
-				System.out.println("RR");
+				//System.out.println("RR");
 				ndT = nd.rchild;
-				nd.height -=2;
 				
 				if(ndT.lchild != null){
 					nd.rchild = ndT.lchild;
 				}else{
 					nd.rchild =null;
 				}
-				ndT.lchild = nd;
-				
-				
-				
+				ndT.lchild = nd;			
 			}else {
-				System.out.println("RL");
+				//System.out.println("RL");
 				ndT = nd.rchild.lchild;
-				ndT.height +=1;
-				System.out.println("key"+nd.key+":"+nd.height);
-				nd.height -= 1;
-				System.out.println("key"+nd.key+":"+nd.height);
+				//System.out.println("key"+nd.key+":"+nd.height);
+				//System.out.println("key"+nd.key+":"+nd.height);
 				if(ndT.rchild != null){
 					nd.rchild.lchild = ndT.rchild;
 				}else{
@@ -123,13 +113,8 @@ public class AVLT{
 				}else{
 					nd.rchild =null;
 				}
-				ndT.lchild = nd;
-				
-				
-				
-			}
-			balance(nd,ndP,LR);
-			
+				ndT.lchild = nd;			
+			}		
 			nd = ndT;
 			if(LR == -1){
 				root = ndT;
@@ -138,21 +123,24 @@ public class AVLT{
 			}else{
 				ndP.rchild = ndT;
 			}
+			balance(nd,ndP,LR);
 		}
-		
-		
-	
-		System.out.println("key"+nd.key+"h"+nd.height);
+		//System.out.println("key"+nd.key+"h"+nd.height);
 		return nd.height;
 	}
-	
-	
 	void insert(int key){
 		Node nd = new Node(key);//받은 key값을 key값으로 하는 노드 nd 생성
 		nd.height = 1;
 		if(root == null){//루트가 null값일때 nd를 루트로 설정
 			root = nd;
 		}else{
+			/*
+			 * 새로 넣을 노드의 key값과 sch값을 비교한다.
+			 * 만약 sch의 키값보다 크고, sch의 rchild가 없으면 새로넣을 노드를 sch의 rchild로 한다.
+			 * sch의 rchild가 있으면 sch를 sch.rchild로 설정하여 반복한다.
+			 * 만약 sch의 키값보다 작고, sch의 lchild가 없으면 새로넣을 노드를 sch의 lchild로 한다.
+			 * sch의 lchild가 있으면 sch를 sch.lchild로 설정하여 반복한다.
+			 * 반복문이 끝나면 balance함수 불러온다.*/
 			Node sch = root;
 			while(true){
 				if(sch.key < nd.key){
@@ -160,8 +148,7 @@ public class AVLT{
 						sch.rchild = nd;
 						break;
 					}
-					sch = sch.rchild;
-					
+					sch = sch.rchild;	
 				}else{
 					if(sch.lchild == null){
 						sch.lchild = nd;
@@ -170,39 +157,10 @@ public class AVLT{
 					sch = sch.lchild;
 				}
 			}
-			balance(root,root,-1);
-			
-			
+			balance(root,root,-1);	
 		}
 	}
-	/*
-	private int insert_help(Node nd, Node newnode){
-		int nheight = 1;
-		if(nd.key < newnode.key){
-			if(nd.rchild != null){
-				nheight += insert_help(nd.rchild,newnode);
-			}else{
-				nd.rchild = newnode;
-				if(nd.lchild == null){
-					nheight += 1;
-				}
-			}
-		}else{
-			if(nd.lchild != null){
-				nheight += insert_help(nd.lchild,newnode);
-			}else{
-				nd.lchild = newnode;
-				if(nd.rchild == null){
-					nheight += 1;
-				}
-			}
-		}	
-		if(nd.height < nheight){
-			nd.height = nheight;
-		}
-		return nd.height;
-	}
-	*/
+	
 	void delete(int key){
 		Node sch = root;//검색용 노드1
 		Node sch_parent = root;//검색용 노드1의 부모를 저장할 노드.
@@ -258,7 +216,6 @@ public class AVLT{
 				}
 			}	
 		}
-		print_preorder_diff();
 		balance(root,root,-1);
 	}
 	
@@ -347,6 +304,9 @@ public class AVLT{
 	}
 	
 	private void order_tra(Node nd,int order,boolean diff){//노드를 받고 order(0: pre, 1:in, 2:post)를 받아 프린트,
+		/*
+		 * diff가 true 이면 해당 노드의 양쪽 child의 높이를 표시한다. 
+		 * */
 		if(nd != null){
 			
 			for(int i = 0 ; i < 3 ; i ++){
@@ -354,15 +314,11 @@ public class AVLT{
 					System.out.print(nd.key);
 					if(diff){
 						int lh=0;
-						int lk = -1;
 						int rh=0;
-						int rk = -1;
 						if(nd.rchild != null){
-							rk = nd.rchild.key;
 							rh = nd.rchild.height;
 						}
 						if(nd.lchild != null){
-							lk = nd.lchild.key;
 							lh = nd.lchild.height;
 						}
 						
