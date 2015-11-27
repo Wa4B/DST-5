@@ -8,6 +8,7 @@ public class Run {
 		
 		for(int i = 0; i < ins.length ; i++){
 			avlt.insert(ins[i]);
+			
 		}
 		avlt.print_preorder();
 		avlt.print_preorder_diff();
@@ -18,6 +19,7 @@ public class Run {
 		avlt.delete(5);
 		avlt.print_preorder_diff();
 		avlt.delete(30);
+		avlt.print_preorder_diff();
 		avlt.delete(18);
 		avlt.print_preorder_diff();
 		

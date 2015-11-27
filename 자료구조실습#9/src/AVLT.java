@@ -16,11 +16,13 @@ public class AVLT{
 		int height = 0;
 		int heightR = 0;
 		int heightL = 0;
-		System.out.println(nd.key);
+		
 		if(nd.lchild != null){
+			//System.out.println("L");
 			heightL = balance(nd.lchild,nd,0);
 		}
 		if(nd.rchild != null){
+			//System.out.println("R");
 			heightR = balance(nd.rchild,nd,1);
 		}
 		
@@ -31,20 +33,30 @@ public class AVLT{
 		}
 		
 		
-		if((LR == -1 &&nd  != root)||(LR == 0&&ndP.lchild != nd)||(LR == 1&&ndP.rchild != nd)){
-			System.out.println("d");
-			return height;
-		}
 		
-		if(nd.height < height){
-			nd.height = height;
-		}
+		
+		
+		nd.height = height;
+		
 		
 		if(heightL-heightR > 1){
-			System.out.println(heightL+","+heightR+","+nd.key);
+			System.out.println("LLL"+heightL+","+heightR+","+nd.key);
 			Node ndT;
-			if(nd.lchild.rchild != null&&nd.lchild.height == nd.lchild.rchild.height +1){
+			if(nd.lchild.lchild != null&&nd.lchild.height == nd.lchild.lchild.height +1){
+				System.out.println("LL");
+				ndT = nd.lchild;
+				nd.height -=2;
 				
+				if(ndT.rchild != null){
+					nd.lchild = ndT.rchild;
+				}else{
+					nd.lchild =null;
+				}
+				ndT.rchild = nd;
+				
+				
+			}else {
+				System.out.println("LR");
 				ndT = nd.lchild.rchild;
 				ndT.height +=1;
 				nd.height -= 1;
@@ -63,20 +75,10 @@ public class AVLT{
 				ndT.rchild = nd;
 				
 				
-			}else {
-				
-				ndT = nd.lchild;
-				nd.height -=2;
-				
-				if(ndT.rchild != null){
-					nd.lchild = ndT.rchild;
-				}else{
-					nd.lchild =null;
-				}
-				ndT.rchild = nd;
-				
 				
 			}
+			balance(nd,ndP,LR);
+			nd = ndT;
 			if(LR == -1){
 				root = ndT;
 			}else if(LR == 0){
@@ -85,13 +87,30 @@ public class AVLT{
 				ndP.rchild = ndT;
 			}
 		}else if(heightR - heightL > 1){
-			System.out.println(heightL+","+heightR+","+nd.key);
-			Node ndT;
-			if(nd.rchild.lchild != null&&nd.rchild.height == nd.rchild.lchild.height +1){
+			
+			System.out.println("RRR"+heightL+","+heightR+","+nd.key);
+			Node ndT = nd;
+			if(nd.rchild.rchild != null&&nd.rchild.height == nd.rchild.rchild.height +1){
+				System.out.println("RR");
+				ndT = nd.rchild;
+				nd.height -=2;
 				
+				if(ndT.lchild != null){
+					nd.rchild = ndT.lchild;
+				}else{
+					nd.rchild =null;
+				}
+				ndT.lchild = nd;
+				
+				
+				
+			}else {
+				System.out.println("RL");
 				ndT = nd.rchild.lchild;
 				ndT.height +=1;
+				System.out.println("key"+nd.key+":"+nd.height);
 				nd.height -= 1;
+				System.out.println("key"+nd.key+":"+nd.height);
 				if(ndT.rchild != null){
 					nd.rchild.lchild = ndT.rchild;
 				}else{
@@ -107,20 +126,10 @@ public class AVLT{
 				ndT.lchild = nd;
 				
 				
-			}else {
-				
-				ndT = nd.rchild;
-				nd.height -=2;
-				
-				if(ndT.lchild != null){
-					nd.rchild = ndT.lchild;
-				}else{
-					nd.rchild =null;
-				}
-				ndT.lchild = nd;
-				
 				
 			}
+			balance(nd,ndP,LR);
+			
 			nd = ndT;
 			if(LR == -1){
 				root = ndT;
@@ -133,7 +142,7 @@ public class AVLT{
 		
 		
 	
-		
+		System.out.println("key"+nd.key+"h"+nd.height);
 		return nd.height;
 	}
 	
@@ -234,7 +243,7 @@ public class AVLT{
 					}
 				}else if((nd = delete_help(sch))!=null){
 					
-					if(sch.lchild != null &&sch.lchild.key != nd.lchild.key){
+					if(sch.lchild != null &&nd.lchild != null&&sch.lchild.key != nd.lchild.key){
 					
 						nd.lchild = sch.lchild;
 					}
@@ -249,6 +258,7 @@ public class AVLT{
 				}
 			}	
 		}
+		print_preorder_diff();
 		balance(root,root,-1);
 	}
 	
@@ -338,17 +348,21 @@ public class AVLT{
 	
 	private void order_tra(Node nd,int order,boolean diff){//노드를 받고 order(0: pre, 1:in, 2:post)를 받아 프린트,
 		if(nd != null){
-			//System.out.print("("+nd.key+")");
+			
 			for(int i = 0 ; i < 3 ; i ++){
 				if(order == i){
 					System.out.print(nd.key);
 					if(diff){
 						int lh=0;
+						int lk = -1;
 						int rh=0;
+						int rk = -1;
 						if(nd.rchild != null){
+							rk = nd.rchild.key;
 							rh = nd.rchild.height;
 						}
 						if(nd.lchild != null){
+							lk = nd.lchild.key;
 							lh = nd.lchild.height;
 						}
 						
