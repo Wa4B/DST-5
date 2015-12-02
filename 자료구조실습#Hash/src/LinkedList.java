@@ -29,7 +29,7 @@ public class LinkedList {
 		}
 	}
 	
-	public void delete(String key){
+	public void delete(String key){//받은 key값과 같은 key값을 가진 노드를 찾아 삭제한다.
 		Node sch = head;
 		if(head.key == key){
 			head = sch.next;

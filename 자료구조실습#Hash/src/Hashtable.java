@@ -8,7 +8,6 @@ public class Hashtable {
 		for(int i = 0 ; i < 6; i++){
 			value[i] = new LinkedList();
 		}
-		
 	}
 	
 	
@@ -42,6 +41,9 @@ public class Hashtable {
 			return "존재하지 않음!";
 		}
 	}
+	/*
+	 * key와 value를 key에 해당하는 hash코드를 index에 받아 this.value[index]에 insert(key,value)
+	 * */
 	
 	void setValue(String key,String value){
 		int index = hashFunction(key);
